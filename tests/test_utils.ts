@@ -160,7 +160,7 @@ export async function withFresh(
 
   const def = deferred<string>();
 
-  Deno.serve({
+  const server = Deno.serve({
     port: 0,
     signal: abort.signal,
     onListen: (info) => {
@@ -173,6 +173,7 @@ export async function withFresh(
     await fn(address);
   } finally {
     abort.abort();
+    await server.finished;
   }
 }
 
